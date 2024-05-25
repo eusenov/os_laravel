@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Http\Requests\AdminRequest;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Hash; 
+use Carbon\Carbon;
 
 class PagesController extends Controller
 {
@@ -31,6 +33,22 @@ class PagesController extends Controller
             return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isNotAdmin']);
         }
     }
+    public function add_product1()
+    {
+        return view('admin.add-product1', ['title'=>'add product 1']); 
+    }
+    public function add_product2(ProductRequest $req)
+    {
+        $currentTimestamp = Carbon::now();
+        $data = $req->validated();
+
+        return view('admin.add-product2', ['title'=>'add product 2', 
+                                            'name'=>$data['name'], 
+                                            'price'=>$data['price'], 
+                                            'in_stock'=>$data['in_stock'], 
+                                            'category'=>$data['category'], 
+                                            'created_at'=>$currentTimestamp]); 
+    }
 
     // registr and login
     public function reg()
@@ -55,3 +73,4 @@ class PagesController extends Controller
         return view('pages.login', ['title'=>'login']); 
     }
 }
+

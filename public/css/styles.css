@@ -109,3 +109,23 @@
 .reg-container__content{
     width: 50%;
 }
+
+/* admin2.blade.php */
+.admin-div {
+    margin: 15px 0;
+}
+.admin-div__content {
+
+}
+.admin-div__columns{
+    display: flex;
+    align-items: start;
+    justify-content: space-around;
+}
+.admin-div__column {
+    display: flex;
+    flex-direction: column;
+}
+.admin-div__column a{
+    margin: 15px 0;
+}
