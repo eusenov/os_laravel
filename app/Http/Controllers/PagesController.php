@@ -13,7 +13,8 @@ class PagesController extends Controller
 {
     public function main()
     {
-        return view('pages.main', ['title'=>'main']); 
+        $products = DB::table('products')->get();
+        return view('pages.main', ['title'=>'main', 'products'=>$products]); 
     }
     public function admin1()
     {
