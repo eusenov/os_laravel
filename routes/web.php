@@ -22,7 +22,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/main', [PagesController::class, 'main']);
+Route::get('/catalog', [PagesController::class, 'catalog']);
 
 // admin
 Route::get('/admin1', [PagesController::class, 'admin1']);

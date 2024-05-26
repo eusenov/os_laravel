@@ -10,7 +10,7 @@
                 <div class="product-block">
                     <div class="product-block__up">
                         <div class="product-block__photo">
-                            <!-- <img src="img/1.jpeg" alt=""> -->
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                         </div>
                     </div>
                     <div class="product-block__down">

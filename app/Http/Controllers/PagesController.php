@@ -11,10 +11,10 @@ use Carbon\Carbon;
 
 class PagesController extends Controller
 {
-    public function main()
+    public function catalog()
     {
         $products = DB::table('products')->get();
-        return view('pages.main', ['title'=>'main', 'products'=>$products]); 
+        return view('pages.catalog', ['title'=>'catalog', 'products'=>$products]); 
     }
     public function admin1()
     {
@@ -42,8 +42,10 @@ class PagesController extends Controller
     {
         $currentTimestamp = Carbon::now();
         $data = $req->validated();
+        $path = $req->file('image')->store('images', 'public');
 
         return view('admin.add-product2', ['title'=>'add product 2', 
+                                            'image'=>$path,
                                             'name'=>$data['name'], 
                                             'price'=>$data['price'], 
                                             'in_stock'=>$data['in_stock'], 

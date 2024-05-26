@@ -19,7 +19,9 @@ class CreateProductsTable extends Migration
             $table->integer('price');
             $table->integer('in_stock');
             $table->string('category', 64);
+            $table->string('country', 64);
             $table->timestamps();
+            $table->string('image');
         });
     }
 
