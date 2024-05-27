@@ -15,7 +15,7 @@ function addProduct($image, $name, $price, $in_stock, $category, $created_at)
 }
 
 
-addProduct($image, $name, $price, $in_stock, $category, $created_at);  
+// addProduct($image, $name, $price, $in_stock, $category, $created_at);  
 
 ?>
 

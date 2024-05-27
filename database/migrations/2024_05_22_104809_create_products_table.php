@@ -18,7 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('name', 32);
             $table->integer('price');
             $table->integer('in_stock');
-            $table->string('category', 64);
+            $table->string('type', 64);
+            $table->string('color', 64);
             $table->string('country', 64);
             $table->timestamps();
             $table->string('image');

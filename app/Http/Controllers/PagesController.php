@@ -44,13 +44,19 @@ class PagesController extends Controller
         $data = $req->validated();
         $path = $req->file('image')->store('images', 'public');
 
-        return view('admin.add-product2', ['title'=>'add product 2', 
-                                            'image'=>$path,
-                                            'name'=>$data['name'], 
-                                            'price'=>$data['price'], 
-                                            'in_stock'=>$data['in_stock'], 
-                                            'category'=>$data['category'], 
-                                            'created_at'=>$currentTimestamp]); 
+        DB::table('products')->insert([
+            'name' => $data['name'],
+            'price' => $data['price'],
+            'in_stock' => $data['in_stock'],
+            'type' => $data['type'],
+            'color' => $data['color'],
+            'country' => $data['country'],
+            'created_at' => $currentTimestamp,
+            'updated_at' => $currentTimestamp,
+            'image' => $path,
+        ]);
+
+        return redirect('/add-product1');
     }
 
     // registr and login

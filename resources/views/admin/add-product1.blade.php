@@ -11,7 +11,10 @@
                     <input name="name" placeholder="name" type="text">
                     <input name="price" placeholder="price" type="number">
                     <input name="in_stock" placeholder="in_stock" type="number">
-                    <input name="category" placeholder="category" type="text">
+                    <input name="type" placeholder="type" type="text">
+                    <input name="color" placeholder="color" type="text">
+                    <input name="country" placeholder="country" type="text">
+                    
                     <input type="submit" value="Добавить">
                 </form>
             </div>
