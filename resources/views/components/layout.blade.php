@@ -15,7 +15,7 @@
             </div>
             <div class="header-information">
                 <a href="">О нас</a>
-                <a href="">Каталог</a>
+                <a href="{{ url('/catalog') }}">Каталог</a>
                 <a href="">Где нас найти?</a>
             </div>
         </div>

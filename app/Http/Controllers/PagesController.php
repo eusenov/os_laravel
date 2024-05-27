@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Http\Requests\AdminRequest;
 use App\Http\Requests\ProductRequest;
+use BadFunctionCallException;
 use Illuminate\Support\Facades\Hash; 
 use Carbon\Carbon;
 
@@ -33,6 +34,11 @@ class PagesController extends Controller
         } else {
             return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isNotAdmin']);
         }
+    }
+    public function admin_logout()
+    {
+        setcookie("isAdmin", "", time() - 3600, "/");
+        return redirect()->route('catalog');
     }
     public function add_product1()
     {
@@ -65,27 +71,15 @@ class PagesController extends Controller
         }
         return view('pages.product', ['title' => $product->name, 'product' => $product]);
     }
-    // registr and login
-    public function reg()
+    public function add_in_basket($id)
     {
-        return view('pages.reg', ['title'=>'reg']); 
-    }
-    public function registration(RegRequest $req)
-    {
-        $data = $req->validated();
+        if (isset($_COOKIE['isAdmin']) && $_COOKIE['isAdmin']) {
+            $message = "Выйдите из режима администратора, чтобы оформить заказ"; 
+            return view('pages.add-in-basket', ['title' => 'Basket', 'id' => $id, 'mess'=>$message]);
+        } else {
+            return view('pages.add-in-basket', ['title' => 'Basket', 'id' => $id]);
+        }
 
-        return DB::table('users')->insert([
-            'name' => $data['name'],
-            'surname' => $data['surname'],
-            'patronymic' => $data['patronymic'] ?? null,
-            'login' => $data['login'],
-            'email' => $data['email'],
-            'password' => $data['password']
-        ]); 
-    }
-    public function login()
-    {
-        return view('pages.login', ['title'=>'login']); 
     }
 }
 

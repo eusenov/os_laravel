@@ -19,4 +19,30 @@ function addProduct($name, $price, $in_stock, $type, $color, $country, $created_
 
 // addProduct($name, $price, $in_stock, $type, $color, $country, $created_at, $image);  
 
+////////////////////////////////////////////////////////////////////////
+
+
+    // registr and login
+    public function reg()
+    {
+        return view('pages.reg', ['title'=>'reg']); 
+    }
+    public function registration(RegRequest $req)
+    {
+        $data = $req->validated();
+
+        return DB::table('users')->insert([
+            'name' => $data['name'],
+            'surname' => $data['surname'],
+            'patronymic' => $data['patronymic'] ?? null,
+            'login' => $data['login'],
+            'email' => $data['email'],
+            'password' => $data['password']
+        ]); 
+    }
+    public function login()
+    {
+        return view('pages.login', ['title'=>'login']); 
+    }
+
 ?>

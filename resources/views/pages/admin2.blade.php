@@ -1,10 +1,10 @@
 <?php
 
-// if($mess == 'isAdmin'){
-//     setcookie("isAdmin", true, time() + 86400, "/");
-// } else {
-//     setcookie("isAdmin", "", time() - 3600, "/");
-// }
+if($mess == 'isAdmin'){
+	setcookie("isAdmin", true, time() + 86400, "/");
+} else {
+	setcookie("isAdmin", "", time() - 3600, "/");
+}
 ?>
 
 <x-layout>
@@ -32,6 +32,9 @@
                             <h3>Заказы</h3>
                             <a href="">На страницу заказов</a>
                         </div>
+                    </div>
+                    <div>
+                        <a href="{{ route('admin.logout') }}">Выйти из режима Админа</a>
                     </div>
                 </div>
             </div>

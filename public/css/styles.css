@@ -129,3 +129,11 @@
 .admin-div__column a{
     margin: 15px 0;
 }
+
+/* product.blade.php */
+.product-detail__photo{
+	width: 300px; 
+}
+.product-detail__photo img{
+	width: 100%; 
+}
