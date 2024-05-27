@@ -30,7 +30,6 @@ class ProductRequest extends FormRequest
             'type' => 'required',
             'color' => 'required', 
             'country' => 'required',
-            'created_at' => 'required',
             'image' => 'required'
         ];
     }

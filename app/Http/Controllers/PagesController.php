@@ -52,7 +52,6 @@ class PagesController extends Controller
             'color' => $data['color'],
             'country' => $data['country'],
             'created_at' => $currentTimestamp,
-            'updated_at' => $currentTimestamp,
             'image' => $path,
         ]);
 
