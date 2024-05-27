@@ -57,7 +57,14 @@ class PagesController extends Controller
 
         return redirect('/add-product1');
     }
-
+    public function productPage($id)
+    {
+        $product = DB::table('products')->find($id);
+        if (!$product) {
+            abort(404);
+        }
+        return view('pages.product', ['title' => $product->name, 'product' => $product]);
+    }
     // registr and login
     public function reg()
     {

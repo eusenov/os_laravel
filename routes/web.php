@@ -23,6 +23,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/catalog', [PagesController::class, 'catalog']);
+Route::get('/catalog/{id}', [PagesController::class, 'productPage'])->name('product.show');
 
 // admin
 Route::get('/admin1', [PagesController::class, 'admin1']);
