@@ -19,7 +19,7 @@ if($mess == 'isAdmin'){
                     <div class="admin-div__columns">
                         <div class="admin-div__column">
                             <h3>Товары</h3>
-                            <a href="">Добавить</a>
+                            <a href="{{ route('add.product') }}">Добавить</a>
                             <a href="">Удалить</a>
                             <a href="">Редактировать</a>
                         </div>

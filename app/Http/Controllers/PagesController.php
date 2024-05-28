@@ -34,6 +34,10 @@ class PagesController extends Controller
         } else {
             return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isNotAdmin']);
         }
+
+        if (isset($_COOKIE['isAdmin']) && $_COOKIE['isAdmin']){
+            return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isAdmin']);
+        }
     }
     public function admin_logout()
     {
@@ -77,7 +81,8 @@ class PagesController extends Controller
             $message = "Выйдите из режима администратора, чтобы оформить заказ"; 
             return view('pages.add-in-basket', ['title' => 'Basket', 'id' => $id, 'mess'=>$message]);
         } else {
-            return view('pages.add-in-basket', ['title' => 'Basket', 'id' => $id]);
+			$product = DB::table('products')->where('id', $id)->first();
+            return view('pages.add-in-basket', ['title' => 'Basket', 'product' => $product]);
         }
 
     }

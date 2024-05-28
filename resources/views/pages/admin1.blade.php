@@ -1,11 +1,4 @@
-<?php
 
-// if(!$_COOKIE('isAdmin'))
-// {
-
-// }
-
-?>
 <x-layout>
     <x-slot name="title">
         {{ $title }}

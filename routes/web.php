@@ -31,5 +31,5 @@ Route::get('/admin1', [PagesController::class, 'admin1']);
 Route::post('/admin2', [PagesController::class, 'admin2']);
 Route::get('/admin-logout', [PagesController::class, 'admin_logout'])->name('admin.logout');
 // admin pages
-Route::get('/add-product1', [PagesController::class, 'add_product1']);
+Route::get('/add-product1', [PagesController::class, 'add_product1'])->name('add.product');
 Route::post('/add-product2', [PagesController::class, 'add_product2']);
