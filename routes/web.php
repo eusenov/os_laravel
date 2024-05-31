@@ -15,16 +15,26 @@ use App\Http\Controllers\PagesController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [PagesController::class, 'catalog']);
 
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/catalog', [PagesController::class, 'catalog'])->name('catalog');
 Route::get('/catalog/{id}', [PagesController::class, 'productPage'])->name('product.show');
-Route::get('/add-in-basket/{id}', [PagesController::class, 'add_in_basket'])->name('add.basket');
+
+// basket
+Route::post('/store-in-basket', [PagesController::class, 'store_in_basket'])->name('store.basket');
+Route::get('/basket', [PagesController::class, 'basket'])->name('basket');
+
+// basket update and remove routes
+Route::post('/basket/update/{id}/{action}', [PagesController::class, 'updateBasket'])->name('basket.update');
+Route::delete('/basket/remove/{id}', [PagesController::class, 'removeFromBasket'])->name('basket.remove');
+
+// orders 
+Route::post('/place-order', [PagesController::class, 'placeOrder'])->name('place.order');
+Route::get('/orders', [PagesController::class, 'orders'])->name('orders');
+
 
 // admin
 Route::get('/admin1', [PagesController::class, 'admin1']);
@@ -33,3 +43,8 @@ Route::get('/admin-logout', [PagesController::class, 'admin_logout'])->name('adm
 // admin pages
 Route::get('/add-product1', [PagesController::class, 'add_product1'])->name('add.product');
 Route::post('/add-product2', [PagesController::class, 'add_product2']);
+
+Route::get('/admin/products', [PagesController::class, 'adminProducts'])->name('admin.products');
+Route::get('/admin/products/edit/{id}', [PagesController::class, 'editProductForm'])->name('admin.products.edit');
+Route::post('/admin/products/edit/{id}', [PagesController::class, 'updateProduct'])->name('admin.products.update');
+Route::delete('/admin/products/delete/{id}', [PagesController::class, 'deleteProduct'])->name('admin.products.delete');

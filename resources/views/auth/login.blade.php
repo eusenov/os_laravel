@@ -5,6 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
+				@if (session('error'))
+					<div class="alert alert-danger">
+						{{ session('error') }}
+					</div>
+				@endif
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
@@ -38,8 +43,6 @@
                                 @enderror
                             </div>
                         </div>
-
-                        <!-- Remember Me and other fields -->
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">

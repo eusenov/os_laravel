@@ -14,8 +14,12 @@
                 <p>Страна: {{ $product->country }}</p>
                 <p>Тип: {{ $product->type }}</p>
                 <p>Цвет: {{ $product->color }}</p>
-                <p>id: {{ $product->id }}</p>
-                <a href="{{ route('add.basket', ['id' => $product->id]) }}">Добавить в корзину</a>
+				<!-- <p>id: {{ $product->id }}</p> -->
+                <form method="POST" action="{{ route('store.basket') }}">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <button type="submit" class="btn btn-primary">Добавить в корзину</button>
+                </form>
             </div>
         </div>
     </x-slot>
