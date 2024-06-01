@@ -6,7 +6,7 @@
     <x-slot name="content">
         <div class="reg-container wrapper">
             <div class="reg-container__content">
-                <form class="regForm" method="post" action="{{ url('/admin2') }}">
+                <form class="regForm" method="post" action="{{ url('/admin-val') }}">
                     @csrf
                     <input name="adminLogin" placeholder="login" type="text">
                     <input name="adminPass" placeholder="pass" type="text">

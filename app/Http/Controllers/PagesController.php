@@ -41,28 +41,33 @@ class PagesController extends Controller
 	}
 
 
-    public function admin1()
+    public function admin_login()
     {
-        return view('pages.admin1', ['title'=>'admin1']); 
+        return view('pages.admin-login', ['title'=>'admin_login']); 
     }
-    public function admin2(AdminRequest $req)
+    public function admin_val(AdminRequest $req)
     {
         $data = $req->validated();
 
         $user = DB::table('admin')->where('name', $data['adminLogin'])->first();
 
-        // return view('pages.admin2', ['title'=>'admin2', 'mess'=>'111']);
-
-        if ($user && Hash::check($data['adminPass'], $user->password)) {
-            return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isAdmin']);
+        if ( $user && Hash::check($data['adminPass'], $user->password) && !isset($_COOKIE['isAdmin']) ) {
+			setcookie("isAdmin", true, time() + 86400, "/");
+			return redirect()->route('admin');
         } else {
-            return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isNotAdmin']);
+			return redirect()->route('catalog');
         }
 
-        if (isset($_COOKIE['isAdmin']) && $_COOKIE['isAdmin']){
-            return view('pages.admin2', ['title'=>'admin2', 'mess'=>'isAdmin']);
+        if (isset($_COOKIE['isAdmin'])){
+            return redirect()->route('admin');
         }
     }
+	public function admin()
+	{
+		if (isset($_COOKIE['isAdmin'])){
+            return view('pages.admin', ['title'=>'admin']); 
+        } 
+	}
     public function admin_logout()
     {
         setcookie("isAdmin", "", time() - 3600, "/");
@@ -101,6 +106,11 @@ class PagesController extends Controller
     }
     public function store_in_basket(Request $request)
     {
+		
+		if (isset($_COOKIE['isAdmin'])) {
+            return redirect()->route('login')->with('error', 'Пожалуйста, выйдите из режима админа и войдите как клиент, чтобы добавить товар в корзину');
+        }
+		
         if (auth()->check()) {
             $userId = auth()->user()->id;
             $productId = $request->input('product_id');
@@ -117,9 +127,7 @@ class PagesController extends Controller
 				->decrement('in_stock');
 
             return redirect()->route('catalog')->with('success', 'Товар добавлен в корзину');
-        } else if (isset($_COOKIE['isAdmin']) && $_COOKIE['isAdmin']){
-			return redirect()->route('login')->with('error', 'Пожалуйста, выйдите из режима админа и войдите как клиент, чтобы добавить товар в корзину');
-		} else {
+        } else {
             return redirect()->route('login')->with('error', 'Пожалуйста, войдите в систему, чтобы добавить товар в корзину');
         }
     }
@@ -194,138 +202,4 @@ class PagesController extends Controller
 		return redirect()->route('basket');
 	}
 	
-	// admin products
-
-	public function adminProducts()
-	{
-		$products = DB::table('products')->get();
-		return view('admin.products', ['title' => 'Admin Products', 'products' => $products]);
-	}
-
-	public function editProductForm($id)
-	{
-		$product = DB::table('products')->find($id);
-		if (!$product) {
-			abort(404);
-		}
-		return view('admin.red-product', ['title' => 'Edit Product', 'product' => $product]);
-	}
-
-	public function updateProduct(ProductRequest $req, $id)
-	{
-		$data = $req->validated();
-		$currentTimestamp = Carbon::now();
-		
-		$updateData = [
-			'name' => $data['name'],
-			'price' => $data['price'],
-			'in_stock' => $data['in_stock'],
-			'type' => $data['type'],
-			'color' => $data['color'],
-			'country' => $data['country'],
-			'updated_at' => $currentTimestamp,
-		];
-
-		if ($req->hasFile('image')) {
-			$path = $req->file('image')->store('images', 'public');
-			$updateData['image'] = $path;
-		}
-
-		DB::table('products')->where('id', $id)->update($updateData);
-		return redirect()->route('admin.products')->with('success', 'Product updated successfully');
-	}
-
-	public function deleteProduct($id)
-	{
-		DB::table('products')->where('id', $id)->delete();
-		return redirect()->route('admin.products')->with('success', 'Product deleted successfully');
-	}
-
-	
-	// orders 
-	public function orders()
-    {
-        $userId = auth()->user()->id;
-
-        $orders = DB::table('orders')
-            ->where('user_id', $userId)
-            ->get();
-
-        return view('pages.orders', [
-            'title' => 'Orders',
-            'orders' => $orders,
-        ]);
-    }
-
-	public function placeOrder()
-    {
-        $userId = auth()->user()->id;
-        $timestamp = Carbon::now()->format('Y_m_d_His');
-        $tableName = "user_{$userId}_{$timestamp}";
-
-        // Создание записи в таблице orders
-        DB::table('orders')->insert([
-            'user_id' => $userId,
-            'created_at' => Carbon::now(),
-            'status' => 'pending',
-        ]);
-
-        // Создание таблицы для нового заказа
-        $this->createOrderTable($userId, $timestamp);
-
-        // Перемещение товаров из корзины в таблицу заказа
-        $basketItems = DB::table('basket')->where('userID', $userId)->get();
-        foreach ($basketItems as $item) {
-            DB::table($tableName)->insert([
-                'product_id' => $item->productID,
-                'quantity' => $item->quantity,
-                'status' => 'in_order',
-            ]);
-            DB::table('products')->where('id', $item->productID)->decrement('in_stock', $item->quantity);
-        }
-
-        // Очистка корзины
-        DB::table('basket')->where('userID', $userId)->delete();
-
-        return redirect()->route('orders')->with('success', 'Заказ успешно оформлен');
-    }
-
-    public function createOrderTable($userId, $timestamp)
-    {
-        $tableName = "user_{$userId}_{$timestamp}";
-        
-        Schema::create($tableName, function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->integer('quantity');
-            $table->string('status')->default('in_order');
-        });
-    }
-
-    public function deleteOrder($id)
-    {
-        $userId = auth()->user()->id;
-        $order = DB::table('orders')->where('id', $id)->where('user_id', $userId)->first();
-
-        if ($order) {
-            $tableName = "user_{$order->user_id}_{$order->created_at->format('Y_m_d_His')}";
-
-            // Восстановление количества товаров в наличии
-            $orderItems = DB::table($tableName)->get();
-            foreach ($orderItems as $item) {
-                DB::table('products')->where('id', $item->product_id)->increment('in_stock', $item->quantity);
-            }
-
-            // Удаление таблицы заказа
-            Schema::dropIfExists($tableName);
-
-            // Удаление записи о заказе
-            DB::table('orders')->where('id', $id)->delete();
-        }
-
-        return redirect()->route('orders')->with('success', 'Заказ удален');
-    }
 }
-
-
-
